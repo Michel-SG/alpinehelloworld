@@ -10,7 +10,7 @@ steps:
     docker build -t gcr.io/$PROJECT_ID/helloworld-image:latest . &&
     docker build -t gcr.io/$PROJECT_ID/helloworld-image:$SHORT_SHA . &&
     docker image inspect gcr.io/$PROJECT_ID/helloworld-image:$SHORT_SHA --format \
-    "{{index .RepoTags 0}}@{{.Id}}" > /workspace/image-digest.txt && \
+    '{{index .RepoTags 0}}@{{.Id}}' > /workspace/image-digest.txt && \
     cat image-digest.txt
 
 - name: gcr.io/cloud-builders/docker
