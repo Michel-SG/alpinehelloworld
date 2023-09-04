@@ -2,25 +2,25 @@
 
 steps:
 
-- name: eu.gcr.io/cloud-builders/docker
+- name: gcr.io/cloud-builders/docker
   entrypoint: /bin/bash 
   args:
   - -c
   - |
-    docker build -t eu.gcr.io/$PROJECT_ID/helloworld-image:latest . &&
-    docker build -t eu.gcr.io/$PROJECT_ID/helloworld-image:$SHORT_SHA . &&
-    docker image inspect eu.gcr.io/$PROJECT_ID/helloworld-image:$SHORT_SHA --format \
+    docker build -t gcr.io/$PROJECT_ID/helloworld-image:latest . &&
+    docker build -t gcr.io/$PROJECT_ID/helloworld-image:$SHORT_SHA . &&
+    docker image inspect gcr.io/$PROJECT_ID/helloworld-image:$SHORT_SHA --format \
     '{{index .RepoTags 0}}@{{.id}}' > /workspace/image-digest.txt && \
     cat image-digest.txt
 
-- name: eu.gcr.io/cloud-builders/docker
+- name: gcr.io/cloud-builders/docker
   entrypoint: /bin/bash 
   args:
   - -c
   - |
     docker images 
-    docker push eu.gcr.io/$PROJECT_ID/helloworld-image:latest 
-    docker push eu.gcr.io/$PROJECT_ID/helloworld-image:$SHORT_SHA
+    docker push gcr.io/$PROJECT_ID/helloworld-image:latest 
+    docker push gcr.io/$PROJECT_ID/helloworld-image:$SHORT_SHA
 
 - name: gcr.io/cloud-builders/gcloud
   entrypoint: /bin/bash 
