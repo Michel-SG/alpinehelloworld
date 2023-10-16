@@ -1,0 +1,31 @@
+Vérifier si un compte Google est actif ou non n'est pas une fonctionnalité fournie par l'API Google. Cela est dû à des raisons de confidentialité et de sécurité. Cependant, vous pouvez vérifier si un compte Google est actif en utilisant des mécanismes d'authentification standard.
+
+Voici comment vous pourriez faire cela en utilisant la bibliothèque google-auth :
+
+from google.auth.transport.requests import Request
+from google.auth.exceptions import TransportError
+
+# Charger les informations d'identification depuis un fichier JSON (voir étape suivante)
+from google.oauth2.service_account import Credentials
+
+# Chemin vers le fichier JSON contenant les informations d'identification
+CREDS_PATH = 'chemin/vers/votre/fichier/credentials.json'
+
+def is_google_account_active():
+    try:
+        creds = Credentials.from_authorized_user_file(CREDS_PATH)
+        creds.refresh(Request())
+        return True
+    except TransportError:
+        return False
+
+# Appel de la fonction pour vérifier si le compte est actif
+if is_google_account_active():
+    print("Le compte Google est actif.")
+else:
+    print("Le compte Google n'est pas actif.")
+
+
+---------
+
+Cependant, cela suppose que vous avez déjà un fichier JSON contenant les informations d'identification pour un compte Google actif. Si vous n'avez pas ce fichier, vous devrez créer un projet dans la Console Google Cloud, activer l'API que vous souhaitez utiliser, créer des identifiants et télécharger le fichier JSON.
