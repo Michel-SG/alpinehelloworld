@@ -1,0 +1,43 @@
+Pour désactiver un compte utilisateur chez Authy, vous devez utiliser l'API d'Authy pour mettre à jour l'état du compte utilisateur. Voici comment vous pouvez procéder :
+
+Obtenir une API Key Authy :
+
+Connectez-vous à votre compte Authy.
+Accédez à la section "Settings" (Paramètres) > "Developer API" (API Développeur).
+Créez ou obtenez votre API Key.
+Utiliser l'API pour désactiver un utilisateur :
+
+Voici un exemple de code Python qui utilise l'API d'Authy pour désactiver un utilisateur :
+
+
+
+
+
+import requests
+
+API_KEY = 'VOTRE_CLE_API'  # Remplacez par votre propre clé API Authy
+USER_ID = 'ID_UTILISATEUR_A_DESACTIVER'  # Remplacez par l'ID de l'utilisateur à désactiver
+
+# URL de l'API pour mettre à jour l'état de l'utilisateur
+endpoint = f'https://api.authy.com/protected/json/users/{USER_ID}/status'
+
+headers = {
+    'X-Authy-API-Key': API_KEY,
+}
+
+payload = {
+    'status': 'unregistered'  # "unregistered" est l'état pour désactiver un utilisateur
+}
+
+response = requests.post(endpoint, headers=headers, data=payload)
+
+if response.status_code == 200:
+    print(f"L'utilisateur {USER_ID} a été désactivé avec succès.")
+else:
+    print(f"Une erreur s'est produite : {response.text}")
+
+
+--------
+Assurez-vous de remplacer VOTRE_CLE_API par votre propre clé API et ID_UTILISATEUR_A_DESACTIVER par l'ID de l'utilisateur que vous souhaitez désactiver.
+
+Notez que le statut de désactivation (ici "unregistered") peut varier selon la configuration de votre application. Assurez-vous de consulter la documentation d'Authy pour les valeurs appropriées.
