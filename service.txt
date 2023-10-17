@@ -1,0 +1,30 @@
+# /usr/lib/systemd/system/optimove.service
+#
+# Get status:
+#   service optimove status
+#
+# Edit and reload service:
+#   sudo sh -c 'vim /usr/lib/systemd/system/optimove.service; systemctl daemon-reload'
+#
+# Copy back to github repository:
+#   cat /usr/lib/systemd/system/optimove.service > ~/OptimoveBackend/systemd/optimove.service
+#
+# Reload systemd services:
+#   sudo systemctl daemon-reload
+
+[Unit]
+Description=Optimove service
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+Restart=always
+RestartSec=1
+StartLimitInterval=0
+WorkingDirectory=/home/ec2-user/OptimoveBackend
+ExecStart=/usr/local/bin/gunicorn 'optiweb_back.app:create_app()' --log-level=debug --log-file=/home/ec2-user/logs --capture-output --workers=1 --timeout=60 --bind=127.0.0.1:5000
+ExecStop=/usr/bin/pkill gunicorn
+
+[Install]
+WantedBy=multi-user.target
