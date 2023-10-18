@@ -1,0 +1,37 @@
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+from googleapiclient.discovery import build
+
+# Portée d'accès pour lire les e-mails
+SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+
+# Chemin vers le fichier de token (ou None si c'est la première fois)
+TOKEN_PATH = 'token.json'
+
+def get_emails():
+    # Configuration de l'accès
+    flow = InstalledAppFlow.from_client_secrets_file(
+        'credentials.json', SCOPES)
+    
+    creds = None
+    if os.path.exists(TOKEN_PATH):
+        creds = flow.run_local_server(port=0)
+    else:
+        creds = flow.run_console()
+
+    # Connexion à l'API Gmail
+    service = build('gmail', 'v1', credentials=creds)
+
+    # Récupérer les labels (boîtes aux lettres)
+    results = service.users().labels().list(userId='me').execute()
+    labels = results.get('labels', [])
+
+    if not labels:
+        print('Aucune boîte aux lettres trouvée.')
+    else:
+        print('Boîtes aux lettres:')
+        for label in labels:
+            print(label['name'])
+
+if __name__ == '__main__':
+    get_emails()
