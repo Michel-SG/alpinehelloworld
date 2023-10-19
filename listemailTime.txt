@@ -1,0 +1,25 @@
+today = date.today()
+yesterday = today - timedelta(1)
+
+query = "before: {0} after: {1}".format(today.strftime('%Y/%m/%d'),
+                                        yesterday.strftime('%Y/%m/%d'))
+
+service = build('gmail', 'v1', credentials=creds)
+results = service.users().messages().list(userId='me', q=query, maxResults=511).execute()
+print(results)
+print("\n")
+
+pageToken = None
+if 'nextPageToken' in results:
+    pageToken = results['nextPageToken']
+
+while pageToken:
+    results = service.users().messages().list(userId='me', q=query, maxResults=511, pageToken=pageToken).execute()
+    print(results)
+    print("\n")
+    if 'nextPageToken' in results:
+        pageToken = results['nextPageToken']
+    else:
+        break
+
+ print("No more messages")
